@@ -8,19 +8,35 @@
         <h1>My Book Tracker</h1>
         <?php
         class Book {
-            public int $bookNumber;
-            public string $title;
-            public string $author;
-            public int $totalPages;
-            public string $genre;
-        }
+            private $bookNumber;
+            private $title;
+            private $author;
+            private $totalPages;
+            private $genre;
 
-        function __construct(int $bookNumber, string $title, string $author, int $totalPages, string $genre) {
+        function __construct($bookNumber, $title, $author, $totalPages, $genre) {
             $this->bookNumber = $bookNumber;
             $this->title = $title;
             $this->author = $author;
             $this->totalPages = $totalPages;
             $this->genre = $genre;
+        }
+
+        function getBookNumber() {
+            return $this->bookNumber;
+        }
+        function getTitle() {
+            return $this->title;
+        }
+        function getAuthor() {
+            return $this->author;
+        }
+        function getTotalPages() {
+            return $this->totalPages;
+        }
+        function getGenre() {
+            return $this->genre;
+        }
         }
 
         $books = [
@@ -32,13 +48,15 @@
         ];
 
         // Displays all books from array
-            function displayBooks(array $books) {
-                foreach ($books as $book) {
-                    echo $book->getBookNumber() . " | "
-                    . $book->getTitle() . " | "
-                    . $book->getAuthor() . " | "
-                    . $book->getTotalPages() . " pages | "
-                    . $book->getGenre() . PHP_EOL;
+           function displayBooks(array $books): void {
+              foreach ($books as $book) {
+                    echo "<p>";
+                    echo $book->getBookNumber() . " | ";
+                    echo $book->getTitle() . " | ";
+                    echo $book->getAuthor() . " | ";
+                    echo $book->getTotalPages() . " pages | ";
+                    echo $book->getGenre() . PHP_EOL;
+                    echo "</p>";
                 }
             }
 
@@ -50,32 +68,51 @@
 
         // Method created via ChatGPT, should add new book to existing array
             function addBook(array &$books): void {
-                echo "Enter Book ID: ";
-                $bookNumber = (int) trim(fgets(STDIN));
-
-                echo "Enter Title: ";
-                $title = trim(fgets(STDIN));
-
-                echo "Enter Author: ";
-                $author = trim(fgets(STDIN));
-
-                echo "Enter Number of Pages: ";
-                $totalPages = (int) trim(fgets(STDIN));
-
-                echo "Enter Genre: ";
-                $genre = trim(fgets(STDIN));
-
-                if (empty($bookNumber) || empty($title) || empty($author) || empty($totalPages) || empty($genre)) {
-                    echo "ERROR: All fields are required. Book was not added.\n";
-                    return:
+                if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["addBook"])) {
+                    $bookNumber = trim($_POST['bookNumber']);
+                    $title = trim($_POST['title']);
+                    $author = trim($_POST['author']);
+                    $totalPages = trim($_POST['totalPages']);
+                    $genre = trim($_POST['genre']);
+                    if ($bookNumber==="" || $title==="" || $author==="" || $totalPages==="" || $genre==="") {
+                        echo "<p style='color:red;'>All fields are required.</p>";
+                        return;
+                    }
+                    if (!is_numeric($bookNumber) || !is_numeric($totalPages)) {
+                        echo "<p style='color:red;'>Book Number and Total Pages must be numbers.</p>";
+                        return;
+                    }
+                    $books[]=new Book((int)$bookNumber, $title, $author, (int)$totalPages, $genre);
+                    echo "<p style='color:green;'>Book added successfully!</p>";
                 }
-
-                $books[] = new Book($bookNumber, $title, $author, $totalPages, $genre);
-
-                echo "\nBook added successfully!\n";
             }
+        ?>
+
+<form method="post">
+    Book Number:
+    <input type="number" name="bookNumber"><br>
+
+    Title:
+    <input type="text" name="title"><br>
+
+    Author:
+    <input type="text" name="author"><br>
+
+    Total Pages:
+    <input type="number" name="totalPages"><br>
+
+    Genre:
+    <input type="text" name="genre"><br>
+
+    <button type="submit" name="addBook">Add Book</button>
+</form>
+
+    <?php
             addBook($books);
-            displayBooks();
+
+            displayBooks($books);
+
+            echo "Total books: " . countBooks($books);
 
             /*
             Overall Prediction: Should display all books in array,
@@ -83,6 +120,7 @@
             to existing array with success message. Error message
             should display if all or some entries are left empty.
             */
-            ?>
+    ?>
+
     </body>
 </html>
