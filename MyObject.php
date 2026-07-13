@@ -33,7 +33,11 @@
         // Displays all books from array
             public function displayBooks(array $books) {
                 foreach ($books as $book) {
-                    echo $book . "\n";
+                    echo $book->getBookNumber() . " | "
+                    . $book->getTitle() . " | "
+                    . $book->getAuthor() . " | "
+                    . $book->getTotalPages() . " pages | "
+                    . $book->getGenre() . PHP_EOL;
                 }
             }
 
@@ -42,5 +46,34 @@
                 $total = count($books);
                 return $total;
             }
+
+        // Method created via ChatGPT, should add new book to existing array
+            public function addBook(array &$books): void {
+                echo "Enter Book ID: ";
+                $bookNumber = (int) trim(fgets(STDIN));
+
+                echo "Enter Title: ";
+                $title = trim(fgets(STDIN));
+
+                echo "Enter Author: ";
+                $author = trim(fgets(STDIN));
+
+                echo "Enter Number of Pages: ";
+                $totalPages = (int) trim(fgets(STDIN));
+
+                echo "Enter Genre: ";
+                $genre = trim(fgets(STDIN));
+
+                if (empty($bookNumber) || empty($title) || empty($author) || empty($totalPages) || empty($genre)) {
+                    echo "ERROR: All fields are required. Book was not added.\n";
+                    return:
+                }
+
+                $books[] = new Book($bookNumber, $title, $author, $totalPages, $genre);
+
+                echo "\nBook added successfully!\n";
+            }
+            addBook($books);
+            displayBooks();
     </body>
 </html>
