@@ -6,6 +6,7 @@
     </head>
     <body>
         <h1>My Book Tracker</h1>
+        <?php
         class Book {
             public int $bookNumber;
             public string $title;
@@ -14,7 +15,7 @@
             public string $genre;
         }
 
-        public function __construct(int $bookNumber, string $title, string $author, int $totalPages, string $genre) {
+        function __construct(int $bookNumber, string $title, string $author, int $totalPages, string $genre) {
             $this->bookNumber = $bookNumber;
             $this->title = $title;
             $this->author = $author;
@@ -31,7 +32,7 @@
         ];
 
         // Displays all books from array
-            public function displayBooks(array $books) {
+            function displayBooks(array $books) {
                 foreach ($books as $book) {
                     echo $book->getBookNumber() . " | "
                     . $book->getTitle() . " | "
@@ -42,13 +43,13 @@
             }
 
         // Displays total number of books within array
-            public function countBooks(array $books): int {
+            function countBooks(array $books): int {
                 $total = count($books);
                 return $total;
             }
 
         // Method created via ChatGPT, should add new book to existing array
-            public function addBook(array &$books): void {
+            function addBook(array &$books): void {
                 echo "Enter Book ID: ";
                 $bookNumber = (int) trim(fgets(STDIN));
 
@@ -82,5 +83,6 @@
             to existing array with success message. Error message
             should display if all or some entries are left empty.
             */
+            ?>
     </body>
 </html>
