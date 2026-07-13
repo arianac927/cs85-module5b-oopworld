@@ -75,5 +75,12 @@
             }
             addBook($books);
             displayBooks();
+
+            /*
+            Overall Prediction: Should display all books in array,
+            prompt user to add another book entry, and add entry
+            to existing array with success message. Error message
+            should display if all or some entries are left empty.
+            */
     </body>
 </html>
